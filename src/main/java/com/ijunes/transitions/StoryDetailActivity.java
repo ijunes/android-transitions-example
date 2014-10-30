@@ -18,6 +18,7 @@ package com.ijunes.transitions;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -28,14 +29,20 @@ import android.transition.TransitionInflater;
 import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.ijunes.transitions.data.StoryContent;
+import com.nirhart.parallaxscroll.views.ParallaxListView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -44,7 +51,7 @@ import java.util.List;
  * item details are presented side-by-side with a list of items
  * in a {@link StoryListActivity}.
  */
-public class StoryDetailActivity extends FragmentActivity {
+public class StoryDetailActivity extends FragmentActivity implements View.OnClickListener{
 
     private List<Scene> sceneList;
 
@@ -64,6 +71,8 @@ public class StoryDetailActivity extends FragmentActivity {
      */
     private TransitionManager mTransitionManager;
 
+    private int tabPosition = 0;
+    ActionBar.TabListener tabListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,12 +122,14 @@ public class StoryDetailActivity extends FragmentActivity {
             actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
             // Create a listener to cope with tab changes
-            ActionBar.TabListener tabListener = new ActionBar.TabListener() {
+            tabListener = new ActionBar.TabListener() {
                 @Override
                 public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
                     // If there's a scene for this tab index, then transition to it
+
                     if(tab.getPosition() <= sceneList.size()) {
-                        performTransitionToScene(sceneList.get(tab.getPosition()));
+                            tabPosition = tab.getPosition();
+                            performTransitionToScene(sceneList.get(tab.getPosition()));
                     }
                 }
 
@@ -132,7 +143,7 @@ public class StoryDetailActivity extends FragmentActivity {
                     // Can ignore this event
                 }
 
-                private void performTransitionToScene(Scene scene) {
+                public void performTransitionToScene(Scene scene) {
                     mTransitionManager.transitionTo(scene);
                 }
             };
@@ -175,18 +186,61 @@ public class StoryDetailActivity extends FragmentActivity {
     private void addContentToViewGroup(ViewGroup viewGroup)
     {
         if (mItem != null) {
-            TextView contentTextView = (TextView) viewGroup.findViewById(R.id.story_content);
+            TextView contentTextView = (TextView) viewGroup.findViewById(R.id.item1);
             if(contentTextView != null) {
                 contentTextView.setText(getResources().getText(mItem.contentResourceId));
             }
-            TextView titleTextView = (TextView) viewGroup.findViewById(R.id.story_title);
+
+            ListView contentListView = (ListView) findViewById(R.id.story_detail_list);
+
+            if(contentListView instanceof ParallaxListView) {
+
+
+
+                View galleryLayout = null;
+                if(tabPosition == 1) {
+                  galleryLayout = getLayoutInflater().inflate(R.layout.header_layout, null);
+                }
+                else if(tabPosition == 0){
+                    galleryLayout = getLayoutInflater().inflate(R.layout.header_layout_small, null);
+                }
+                if(galleryLayout!=null) {
+
+
+                    ImageView imageView = (ImageView) galleryLayout.findViewById(R.id.story_image);
+                    imageView.setOnClickListener(this);
+                    ((ParallaxListView)contentListView).addParallaxedHeaderView(galleryLayout);
+
+                }
+            }
+            TextView titleTextView = (TextView) viewGroup.findViewById(R.id.item2);
             if(titleTextView != null) {
                 titleTextView.setText(mItem.title);
             }
-            ImageView imageView = (ImageView) viewGroup.findViewById(R.id.story_image);
-            if(imageView != null) {
-                imageView.setImageResource(mItem.imageResourceId);
-            }
+
         }
     }
+
+
+
+    @Override
+    public void onClick(View v) {
+        if(tabPosition == 0 ){
+            mTransitionManager.transitionTo(sceneList.get(1));
+            tabPosition = 1;
+        }
+
+    }
+    @Override
+    public void onBackPressed(){
+        if(tabPosition == 1 ){
+            mTransitionManager.transitionTo(sceneList.get(0));
+            tabPosition = 0;
+        }
+        else{
+            super.onBackPressed();
+        }
+    }
+
+
 }

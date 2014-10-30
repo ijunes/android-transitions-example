@@ -1,17 +1,40 @@
-<LinearLayout
-xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
 android:orientation="vertical"
 android:layout_width="fill_parent"
-android:layout_height="wrap_content"
-android:id="@+id/linearLayout" >
+android:layout_height="match_parent"
+>
 
-<ImageView
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:scaleType="matrix"
-    android:id="@+id/story_image"
-    android:layout_gravity="center_horizontal"
-    android:src="@drawable/sample1"/>
+    <com.nirhart.parallaxscroll.views.ParallaxListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/story_detail_list"
+        android:scrollbars="none"
+        android:dividerHeight="0dp"
+        app:parallax_factor="1.5" />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="500dp"
+        android:scaleType="matrix"
+        android:id="@+id/story_image"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/sample1"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:gravity="center"
+        android:id="@+id/item1"
+        android:layout_below="@+id/story_image"
+        android:text="Sample"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:gravity="center"
+        android:text="Sample"
+        android:layout_below="@+id/item1"/>
 
 
-</LinearLayout>
+
+</RelativeLayout>

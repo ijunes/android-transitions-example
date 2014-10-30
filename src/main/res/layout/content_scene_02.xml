@@ -5,22 +5,28 @@
     android:layout_height="wrap_content"
     android:id="@+id/linearLayout" >
 
-    <TextView
+    <ImageView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Title Text"
-        android:id="@+id/story_title"
-        android:padding="10dp"
-        android:longClickable="false"
-        android:textStyle="bold" />
+        android:layout_height="0dp"
+        android:scaleType="matrix"
+        android:id="@+id/story_image"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/sample1"/>
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/story_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Content Text"
-        android:padding="5dp" />
+        android:layout_height="250dp"
+        android:padding="30dp"
+        android:id="@+id/item1"
+        android:layout_below="@+id/story_image"
+        android:text="Sample"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="2500dp"
+        android:padding="30dp"
+        android:id="@+id/item2"
+        android:text="Sample"
+        android:layout_below="@+id/item1"/>
+
 
 </LinearLayout>
